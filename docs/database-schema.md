@@ -1,0 +1,1 @@
+(conteúdo de database-schema.md conforme gerado no canvas)
