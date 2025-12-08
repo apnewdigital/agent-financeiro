@@ -1,16 +1,22 @@
 {
   "name": "agent-financeiro-api",
   "version": "1.0.0",
-  "description": "Backend auxiliares para Agente Financeiro IA",
-  "main": "src/index.js",
+  "type": "module",
+  "description": "API backend minimal e organizada para o Agente Financeiro (Express + Supabase).",
+  "main": "src/server.js",
   "scripts": {
-    "dev": "node src/index.js",
-    "start": "node src/index.js"
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
   },
+  "author": "André Junior",
+  "license": "MIT",
   "dependencies": {
-    "express": "^4.18.2",
     "@supabase/supabase-js": "^2.0.0",
-    "body-parser": "^1.20.2",
-    "dotenv": "^16.0.3"
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
   }
 }
