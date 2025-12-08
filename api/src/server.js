@@ -8,44 +8,33 @@
  *   proteção contra body too large, monitoramento (Sentry) e testes automatizados.
  */
 
-import express from 'express';
-import cors from 'cors';
-import dotenv from 'dotenv';
+import express from "express";
+import bodyParser from "body-parser";
+import dotenv from "dotenv";
 
-import { createUser } from './controllers/usersController.js';
-import { createTransaction, listTransactions } from './controllers/transactionsController.js';
+import usersRoutes from "./routes/usersRoutes.js";
+import transactionsRoutes from "./routes/transactionsRoutes.js";
 
+// Carrega variáveis do .env
 dotenv.config();
 
 const app = express();
 
-// Middlewares básicos
-app.use(cors());             // Em produção, configure `origin` para dominios permitidos
-app.use(express.json({ limit: '1mb' })); // Protege contra bodies gigantes
+// Middlewares globais
+app.use(bodyParser.json());
 
-// Rotas - versão minimal, organizadas por controller
-app.get('/health', (req, res) => res.json({ status: 'ok' }));
-
-// Users
-app.post('/api/users', createUser);
-
-// Transactions
-app.post('/api/transactions', createTransaction);
-app.get('/api/transactions', listTransactions);
-
-// Catch-all para rotas desconhecidas
-app.use((req, res) => {
-  res.status(404).json({ error: 'Not found' });
+// Health check – útil para monitoramento ou n8n
+app.get("/health", (req, res) => {
+  res.json({ status: "ok", timestamp: new Date().toISOString() });
 });
 
-// Error handler simples (melhore no futuro)
-app.use((err, req, res, next) => {
-  console.error(err);
-  res.status(500).json({ error: 'internal_error' });
-});
+// ROTAS
+app.use("/users", usersRoutes);
+app.use("/transactions", transactionsRoutes);
 
-// Iniciar servidor
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`🔥 Agent Financeiro API rodando na porta ${PORT}`);
+// Porta (heroku/railway usa process.env.PORT automaticamente)
+const port = process.env.PORT || 3000;
+
+app.listen(port, () => {
+  console.log(`🔥 Server running on port ${port}`);
 });
